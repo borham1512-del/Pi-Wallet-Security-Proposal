@@ -1,11 +1,102 @@
+Pi Wallet Security Enhancement Proposal
+Application-Layer Protection Model (ALPM)
+
+1. Problem Statement
+Current wallet interaction models allow a successful account authentication event to translate directly into transaction capability with minimal friction.
+
+This creates a high-risk scenario where:
+Compromised credentials or sessions
+Lead to immediate and irreversible asset transfers
+Without sufficient detection or intervention window
+The issue is not at the blockchain level, but at the application interaction layer, where user actions are initiated.
+
+2. Design Objective
+The goal of this proposal is to:
+Reduce the impact of account compromise
+Introduce controlled execution friction
+Provide a user-intervention window before transaction finalization
+Without:
+Modifying blockchain protocol
+Accessing or storing private keys
+Violating self-custody principles
+
+3. Design Constraints
+The solution strictly adheres to the following constraints:
+No access to Seed Phrase or private keys
+No changes to consensus or transaction finality
+No centralized control over user funds
+All controls operate pre-signature within the application layer
+
 4. Proposed Architecture
 Integrated Protection Layers (IPL)
 The system introduces a sequence of independent but coordinated controls applied before transaction execution.
+
+4.1 Security Time-Lock (Execution Delay)
+All outbound transactions initiated via the application are placed in a pending state for a defined period (e.g., 24–72 hours) before final execution.
+Purpose:
+Mitigate rapid extraction attacks
+Provide a recovery window for legitimate users
+
+4.2 Step-up Authentication (Transaction-Level Verification)
+A secondary authentication step is required at transaction execution time, independent of login authentication.
+Examples:
+One-Time Password (OTP) via email or SMS
+Authenticator-based verification
+Purpose:
+Prevent transaction execution using compromised session access alone
+
+4.3 Trusted Device Binding
+Transaction execution via the application interface is restricted to previously authorized devices.
+New devices enter a cooling-off period (e.g., 48–72 hours)
+No transaction capability during this period
+Scope:
+Applies only to application-level interactions
+Purpose:
+Reduce risk from unauthorized device access
+
+4.4 User-Controlled Freeze (Emergency Lock)
+Users are provided with a mechanism to temporarily disable outbound transactions at the application level.
+Purpose:
+Immediate containment of suspected compromise
+No impact on asset ownership or blockchain state
+
+4.5 Active Alerting and Intervention
+Real-time notifications are triggered for critical events:
+New device login
+Transaction initiation
+Security setting changes
+Users are provided with actionable controls:
 Cancel pending transaction
 Flag suspicious activity
 Purpose:
 Enable real-time user awareness and intervention
-layered verification, and user intervention capabilities, the system transitions from immediate vulnerability to controlled and observable execution.
+
+5. System Compatibility
+This model is fully compatible with existing system architecture because:
+It operates entirely before transaction signing
+It does not modify blockchain behavior
+It does not require custody of 4. Proposed Architecture
+Integrated Protection Layers (IPL)
+The system introduces a sequence of independent but coordinated controls applied before transaction execution.es
+
+6. Security Impact
+Expected outcomes:
+Significant reduction in immediate fund extraction risk
+Increased attack complexity and required time
+Introduction of a user recovery window
+Improved trust in wallet interaction model
+
+7. Limitations
+Does not prevent attacks executed outside the official application environment
+Does not eliminate risks associated with full key compromise
+Relies on correct implementation of delay and notification systems
+
+8. Conclusion
+This proposal introduces a practical and scalable approach to wallet security by reinforcing the application layer—where user intent is translated into transaction requests.
+It does not attempt to override decentralization, but rather strengthens the only layer fully controlled by the system: the user interaction layer.
+By introducing structured delay, layered verification, and user intervention capabilities, the system transitions from immediate vulnerability to controlled and observable execution.
+
+
 Final Note
 This proposal is designed as a non-invasive enhancement that can be incrementally implemented without disrupting existing infrastructure, while significantly improving real-world security outcomes.
 .................... 
